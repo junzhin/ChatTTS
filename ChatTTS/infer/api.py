@@ -42,8 +42,8 @@ def infer_code(
     emb = models['gpt'].get_emb(**inputs)
     if spk_emb is not None:
         emb[inputs['input_ids'][..., 0] == models['tokenizer'].convert_tokens_to_ids('[spk_emb]')] = \
-            F.normalize(spk_emb.to(device).to(emb.dtype)[None].expand(len(text), -1), p=2.0, dim=1, eps=1e-12)  
-    
+            F.normalize(spk_emb[None].to(device).to(emb.dtype).expand(len(text), -1), p=2.0, dim=1, eps=1e-12)  
+    # 
     num_code = models['gpt'].emb_code[0].num_embeddings - 1
     
     LogitsWarpers = []
